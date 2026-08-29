@@ -40,15 +40,15 @@ window.MODEL_MATCH = {
     { id: 'satelite',    display: { type: 'emoji', value: '🛰️' }, label: 'Fotografía satelital', hint: 'Imagen a escala del terreno real',            cat: 'iconico' },
 
     // ---------- ANALÓGICOS: se asemejan en su comportamiento / propiedades ----------
-    { id: 'presa',       display: { type: 'emoji', value: '🌊' }, label: 'Maqueta de la presa',   hint: 'Modelo físico que reproduce el comportamiento del agua', cat: 'analogico' },
+    { id: 'maqueta',     display: { type: 'emoji', value: '⚙️' }, label: 'Maqueta en funcionamiento', hint: 'Se asemeja al comportamiento y conserva propiedades del sistema real', cat: 'analogico' },
     { id: 'curva',       display: { type: 'emoji', value: '📈' }, label: 'Curva de demanda',      hint: 'Gráfica que refleja el comportamiento del mercado',      cat: 'analogico' },
     { id: 'flujo',       display: { type: 'emoji', value: '🔀' }, label: 'Diagrama de flujo',     hint: 'Representa el comportamiento del proceso',                cat: 'analogico' },
-    { id: 'organigrama', display: { type: 'emoji', value: '👥' }, label: 'Organigrama',           hint: 'Refleja la estructura del sistema real',                  cat: 'analogico' },
+    { id: 'comportamiento', display: { type: 'emoji', value: '🔁' }, label: 'Diagrama de comportamiento', hint: 'Representa cómo cambia el sistema',                 cat: 'analogico' },
 
     // ---------- SIMBÓLICOS: relaciones lógicas y matemáticas (variables y restricciones) ----------
-    { id: 'fobj',        display: { type: 'formula', value: 'Max Z = 5X₁ + 2X₂' }, label: 'Función objetivo',   hint: 'Utilidad: $5 por bolsa de lujo, $2 por normal', cat: 'simbolico' },
-    { id: 'rhoras',      display: { type: 'formula', value: '2X₁ + X₂ ≤ 45' },      label: 'Restricción de horas', hint: 'Máximo 45 horas de empaquetado',              cat: 'simbolico' },
-    { id: 'lineal',      display: { type: 'formula', value: 'y = 2x' },             label: 'Ecuación lineal',      hint: 'Relación matemática entre variables',          cat: 'simbolico' },
-    { id: 'rgrafico',    display: { type: 'formula', value: '2x + y ≤ 80' },        label: 'Restricción del modelo', hint: 'Limita a las variables de decisión',         cat: 'simbolico' }
+    { id: 'fobj',        display: { type: 'formula', value: 'Max Z = 5X₁ + 2X₂' }, label: 'Caso de bolsas',          hint: 'Función objetivo: utilidad de $5 por bolsa de lujo y $2 por normal', cat: 'simbolico' },
+    { id: 'rhoras',      display: { type: 'formula', value: '2X₁ + X₂ ≤ 45' },      label: 'Límite de empaquetado',   hint: 'Restricción: máximo 45 horas de empaquetado',                         cat: 'simbolico' },
+    { id: 'lineal',      display: { type: 'formula', value: 'y = 2x' },             label: 'Relación entre variables', hint: 'Ecuación lineal: relación matemática entre variables',                cat: 'simbolico' },
+    { id: 'rgrafico',    display: { type: 'formula', value: '2x + y ≤ 80' },        label: 'Límite del modelo',       hint: 'Restricción que limita a las variables de decisión',                   cat: 'simbolico' }
   ]
 };

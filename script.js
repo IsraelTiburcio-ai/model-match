@@ -19,6 +19,10 @@
   const scoreValue = $('scoreValue');
   const scoreMax = $('scoreMax');
   const dotsEl = $('dots');
+  const roundClock = $('roundClock');
+  const roundProgress = $('roundProgress');
+  const roundBar = $('roundBar');
+  const roundSeconds = $('roundSeconds');
   const stage = $('stage');
   const card = $('card');
   const cardDisplay = $('cardDisplay');
@@ -38,8 +42,12 @@
   let queue = [];
   let index = 0;
   let score = 0;
+  let outcomes = [];
   let startTs = 0;
   let timerId = null;
+  const ROUND_LIMIT_MS = 6000;
+  let roundTimerId = null;
+  let roundStartTs = 0;
   let locked = false;
   let playing = false;
 
@@ -188,16 +196,46 @@
     timeValue.textContent = Math.floor((Date.now() - startTs) / 1000) + ' s';
   }
 
+  function clearRoundTimer() {
+    clearInterval(roundTimerId);
+    roundTimerId = null;
+  }
+
+  function renderRoundTimer(remaining) {
+    const value = Math.max(0, Math.min(ROUND_LIMIT_MS, remaining));
+    const ratio = value / ROUND_LIMIT_MS;
+    roundBar.style.width = `${ratio * 100}%`;
+    roundSeconds.textContent = `${Math.ceil(value / 1000)} s`;
+    roundProgress.setAttribute('aria-valuenow', String(Math.round(value)));
+    roundClock.classList.toggle('urgent', value <= 2000 && value > 0);
+  }
+
+  function startRoundTimer() {
+    clearRoundTimer();
+    roundStartTs = performance.now();
+    renderRoundTimer(ROUND_LIMIT_MS);
+    roundTimerId = setInterval(() => {
+      const remaining = ROUND_LIMIT_MS - (performance.now() - roundStartTs);
+      renderRoundTimer(remaining);
+      if (remaining <= 0) {
+        clearRoundTimer();
+        choose(null, null, true);
+      }
+    }, 50);
+  }
+
   function renderDots() {
     dotsEl.innerHTML = '';
     for (let i = 0; i < TOTAL; i++) {
       const d = document.createElement('span');
-      d.className = 'dot' + (i === index ? ' now' : '');
+      const state = outcomes[i] === true ? ' ok' : outcomes[i] === false ? ' bad' : '';
+      d.className = 'dot' + state + (i === index ? ' now' : '');
       dotsEl.appendChild(d);
     }
   }
 
   function markDot(i, ok) {
+    outcomes[i] = ok;
     const d = dotsEl.children[i];
     if (d) d.classList.add(ok ? 'ok' : 'bad');
   }
@@ -215,13 +253,16 @@
       cardDisplay.innerHTML = `<span class="emoji" role="img" aria-label="${item.label}">${item.display.value}</span>`;
     }
     cardLabel.textContent = item.label;
-    cardHint.textContent = item.hint;
+    cardHint.textContent = '';
+    cardHint.classList.add('is-hidden');
+    startRoundTimer();
   }
 
   function startGame() {
     queue = buildQueue();
     index = 0;
     score = 0;
+    outcomes = Array(TOTAL).fill(null);
     locked = false;
     playing = true;
     scoreValue.textContent = '0';
@@ -236,14 +277,17 @@
     srStatus.textContent = 'Juego iniciado. Clasifica cada modelo.';
   }
 
-  function choose(catId, btn) {
+  function choose(catId, btn, timedOut = false) {
     if (!playing || locked) return;
     locked = true;
-    sfx.tap();
+    clearRoundTimer();
+    if (!timedOut) sfx.tap();
 
     const item = queue[index];
     const ok = catId === item.cat;
     const correctBtn = deck.querySelector(`[data-cat="${item.cat}"]`);
+    cardHint.textContent = item.hint;
+    cardHint.classList.remove('is-hidden');
 
     if (ok) {
       score++;
@@ -262,13 +306,14 @@
     } else {
       sfx.bad();
       card.classList.add('is-wrong');
-      btn.classList.add('is-wrong');
+      if (btn) btn.classList.add('is-wrong');
       correctBtn.classList.add('is-reveal');
       deck.classList.add('locked');
       stage.classList.add('shake');
       if (navigator.vibrate) { try { navigator.vibrate(60); } catch (_) {} }
-      toast(`Era: ${catById(item.cat).label}`, false);
-      srStatus.textContent = `Incorrecto. ${item.label} es un modelo ${catById(item.cat).short.toLowerCase()}. ${catById(item.cat).desc}`;
+      const prefix = timedOut ? '¡Tiempo! ' : '';
+      toast(`${prefix}Era: ${catById(item.cat).label}`, false);
+      srStatus.textContent = `${timedOut ? 'Se acabó el tiempo. ' : 'Incorrecto. '}${item.label} es un modelo ${catById(item.cat).short.toLowerCase()}. ${catById(item.cat).desc}`;
       markDot(index, false);
     }
 
@@ -293,6 +338,7 @@
   function endGame() {
     playing = false;
     clearInterval(timerId);
+    clearRoundTimer();
     const secs = Math.max(1, Math.round((Date.now() - startTs) / 1000));
     const v = verdict(score);
     resultEmoji.textContent = v.emoji;

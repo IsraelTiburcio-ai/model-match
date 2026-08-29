@@ -68,6 +68,14 @@
 
         <div class="dots" id="dots" aria-hidden="true"></div>
 
+        <div class="round-clock" id="roundClock" role="timer" aria-label="Tiempo para responder">
+          <span class="round-clock-label">RESPONDE EN</span>
+          <div class="round-track" id="roundProgress" role="progressbar" aria-label="Tiempo restante de esta tarjeta" aria-valuemin="0" aria-valuemax="6000" aria-valuenow="6000">
+            <span class="round-bar" id="roundBar"></span>
+          </div>
+          <span class="round-seconds" id="roundSeconds">6 s</span>
+        </div>
+
         <div id="stage" class="stage" aria-live="polite">
           <div class="card" id="card">
             <div class="card-display" id="cardDisplay"></div>

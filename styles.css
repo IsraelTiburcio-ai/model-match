@@ -201,6 +201,46 @@ body {
 .dot.ok  { background: var(--good); box-shadow: 0 0 8px rgba(52, 227, 154, 0.6); }
 .dot.bad { background: var(--bad);  box-shadow: 0 0 8px rgba(255, 93, 115, 0.6); }
 
+.round-clock {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 9px;
+  margin: 10px 2px 0;
+  color: var(--muted);
+}
+.round-clock-label {
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  white-space: nowrap;
+}
+.round-track {
+  height: 7px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+}
+.round-bar {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--c-analogico), #8ab4ff, var(--c-simbolico));
+  transform-origin: left center;
+  transition: width 0.08s linear, background 0.2s ease;
+}
+.round-seconds {
+  min-width: 24px;
+  color: var(--text);
+  font-size: 0.76rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+.round-clock.urgent .round-bar { background: var(--bad); }
+.round-clock.urgent .round-seconds { color: var(--bad); }
+
 /* ---------- escenario ---------- */
 .stage { flex: 1; display: flex; align-items: center; justify-content: center; position: relative; padding: 14px 0; }
 
@@ -246,7 +286,8 @@ body {
 }
 
 .card-label { font-size: 1.42rem; font-weight: 800; letter-spacing: 0.01em; }
-.card-hint { font-size: 0.9rem; color: var(--muted); line-height: 1.4; max-width: 30ch; }
+.card-hint { min-height: 2.8em; font-size: 0.9rem; color: var(--muted); line-height: 1.4; max-width: 30ch; }
+.card-hint.is-hidden { visibility: hidden; }
 
 /* estados de feedback de la carta */
 .card.is-correct { border-color: rgba(52, 227, 154, 0.8); box-shadow: 0 0 0 3px rgba(52, 227, 154, 0.25), 0 18px 44px rgba(0, 0, 0, 0.35); }
@@ -256,6 +297,7 @@ body {
   position: absolute;
   left: 50%;
   top: 6px;
+  max-width: calc(100% - 16px);
   transform: translateX(-50%);
   padding: 8px 16px;
   border-radius: 999px;
