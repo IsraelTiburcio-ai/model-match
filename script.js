@@ -85,10 +85,19 @@
   function ctx() {
     if (!audioCtx) {
       const AC = window.AudioContext || window.webkitAudioContext;
-      if (AC) audioCtx = new AC();
+      if (AC) {
+        try { audioCtx = new AC(); } catch (_) { return null; }
+      }
     }
-    if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+    if (audioCtx && audioCtx.state === 'suspended') {
+      const resume = audioCtx.resume();
+      if (resume && typeof resume.catch === 'function') resume.catch(() => {});
+    }
     return audioCtx;
+  }
+
+  function primeAudio() {
+    if (!muted) ctx();
   }
 
   function tone(freq, delay, dur, type = 'sine', peak = 0.18) {
@@ -259,6 +268,8 @@
   }
 
   function startGame() {
+    // El primer gesto debe desbloquear el audio antes de que pueda vencer el reloj.
+    primeAudio();
     queue = buildQueue();
     index = 0;
     score = 0;
