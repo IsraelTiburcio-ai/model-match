@@ -16,7 +16,8 @@ Microjuego educativo arcade, mobile-first, para reforzar la **clasificación de 
 
 1. Toca **JUGAR**.
 2. Clasifica 10 modelos aleatorios tocando **ICÓNICO**, **ANALÓGICO** o **SIMBÓLICO**.
-3. Al final ves tus aciertos, tu tiempo y puedes **JUGAR OTRA VEZ**.
+3. Al final ves tus aciertos, tu tiempo y puedes revisar las 10 respuestas.
+4. Elige **JUGAR OTRA VEZ** para comenzar una nueva selección aleatoria.
 
 En desktop también funciona con teclado: `1` `2` `3` para responder, `M` para silenciar.
 

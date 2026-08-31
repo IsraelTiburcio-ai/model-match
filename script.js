@@ -34,6 +34,9 @@
   const resultTitle = $('resultTitle');
   const resultScore = $('resultScore');
   const resultTime = $('resultTime');
+  const btnAnswers = $('btnAnswers');
+  const answerReview = $('answerReview');
+  const answerList = $('answerList');
 
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -43,6 +46,7 @@
   let index = 0;
   let score = 0;
   let outcomes = [];
+  let answerLog = [];
   let startTs = 0;
   let timerId = null;
   const ROUND_LIMIT_MS = 6000;
@@ -200,6 +204,13 @@
     });
   }
 
+  function resetReview() {
+    answerReview.hidden = true;
+    btnAnswers.textContent = 'Ver respuestas';
+    btnAnswers.setAttribute('aria-expanded', 'false');
+    screens.result.classList.remove('review-open');
+  }
+
   // ---------- HUD ----------
   function renderHud() {
     timeValue.textContent = Math.floor((Date.now() - startTs) / 1000) + ' s';
@@ -274,8 +285,10 @@
     index = 0;
     score = 0;
     outcomes = Array(TOTAL).fill(null);
+    answerLog = Array(TOTAL).fill(null);
     locked = false;
     playing = true;
+    resetReview();
     scoreValue.textContent = '0';
     scoreMax.textContent = '/' + TOTAL;
     startTs = Date.now();
@@ -297,6 +310,7 @@
     const item = queue[index];
     const ok = catId === item.cat;
     const correctBtn = deck.querySelector(`[data-cat="${item.cat}"]`);
+    answerLog[index] = { selected: catId, correct: ok, timedOut };
     cardHint.textContent = item.hint;
     cardHint.classList.remove('is-hidden');
 
@@ -346,6 +360,58 @@
     return { emoji: '📚', text: '¡Sigue practicando!' };
   }
 
+  function renderReview() {
+    answerList.innerHTML = '';
+    queue.forEach((item, i) => {
+      const log = answerLog[i] || {};
+      const correct = catById(item.cat);
+      const selected = log.selected ? catById(log.selected) : null;
+      const row = document.createElement('li');
+      row.className = `answer-row ${log.correct ? 'is-ok' : 'is-bad'}`;
+
+      const number = document.createElement('span');
+      number.className = 'review-number';
+      number.textContent = String(i + 1);
+
+      const display = document.createElement('span');
+      display.className = `review-display ${item.display.type}`;
+      display.textContent = item.display.value;
+      display.setAttribute('aria-hidden', 'true');
+
+      const copy = document.createElement('span');
+      copy.className = 'review-copy';
+
+      const label = document.createElement('strong');
+      label.className = 'review-label';
+      label.textContent = item.label;
+
+      const answer = document.createElement('span');
+      answer.className = 'review-answer';
+      if (log.correct) {
+        answer.textContent = `✓ Correcta: ${correct.label}`;
+      } else if (selected) {
+        answer.textContent = `✕ Correcta: ${correct.label} · Tú: ${selected.label}`;
+      } else {
+        answer.textContent = `⌛ Correcta: ${correct.label} · Sin respuesta`;
+      }
+
+      copy.append(label, answer);
+      row.append(number, display, copy);
+      answerList.appendChild(row);
+    });
+  }
+
+  function toggleReview() {
+    const open = answerReview.hidden;
+    answerReview.hidden = !open;
+    btnAnswers.textContent = open ? 'Ocultar respuestas' : 'Ver respuestas';
+    btnAnswers.setAttribute('aria-expanded', String(open));
+    screens.result.classList.toggle('review-open', open);
+    if (open && typeof answerReview.scrollIntoView === 'function') {
+      answerReview.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'nearest' });
+    }
+  }
+
   function endGame() {
     playing = false;
     clearInterval(timerId);
@@ -356,6 +422,8 @@
     resultTitle.textContent = v.text;
     resultScore.textContent = `${score}/${TOTAL}`;
     resultTime.textContent = `${secs} s`;
+    renderReview();
+    resetReview();
     sfx.finish();
     srStatus.textContent = `Fin del juego. Aciertos: ${score} de ${TOTAL}. Tiempo: ${secs} segundos. ${v.text}`;
     show('result');
@@ -401,7 +469,8 @@
   // ---------- eventos ----------
   btnPlay.addEventListener('click', startGame);
   btnAgain.addEventListener('click', startGame);
-  btnHome.addEventListener('click', () => show('title'));
+  btnAnswers.addEventListener('click', toggleReview);
+  btnHome.addEventListener('click', () => { resetReview(); show('title'); });
 
   btnMute.addEventListener('click', () => {
     muted = !muted;

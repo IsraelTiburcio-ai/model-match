@@ -401,6 +401,7 @@ body {
 
 /* ---------- resultado ---------- */
 .screen-result { justify-content: center; align-items: center; gap: 18px; text-align: center; }
+.screen-result.review-open { justify-content: flex-start; padding-top: 8px; }
 .result-emoji { font-size: 64px; line-height: 1; animation: popOk 0.5s cubic-bezier(0.2, 1.6, 0.4, 1) both; filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.45)); }
 .result-title {
   font-size: clamp(1.9rem, 9vw, 2.4rem);
@@ -425,6 +426,58 @@ body {
 .stat-label { font-size: 0.78rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
 
 .screen-result .btn-primary { width: 100%; max-width: 340px; }
+.screen-result .btn-answers { width: 100%; max-width: 340px; }
+
+.answer-review {
+  width: 100%;
+  max-width: 420px;
+  padding: 16px;
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.045);
+  text-align: left;
+}
+.answer-review[hidden] { display: none; }
+.answer-review h3 { margin-bottom: 11px; font-size: 1rem; font-weight: 800; }
+.answer-list {
+  display: grid;
+  gap: 8px;
+  max-height: min(52vh, 440px);
+  overflow-y: auto;
+  list-style: none;
+  padding-right: 3px;
+  overscroll-behavior: contain;
+}
+.answer-row {
+  display: grid;
+  grid-template-columns: 24px 48px minmax(0, 1fr);
+  align-items: center;
+  gap: 9px;
+  min-height: 58px;
+  padding: 8px 9px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 13px;
+  background: rgba(0, 0, 0, 0.12);
+}
+.review-number { color: var(--muted); font-size: 0.76rem; font-weight: 800; text-align: center; }
+.review-display { display: grid; place-items: center; width: 48px; min-width: 0; }
+.review-display.emoji { font-size: 1.85rem; line-height: 1; }
+.review-display.formula {
+  overflow: hidden;
+  border-radius: 7px;
+  padding: 7px 4px;
+  color: #e9e2ff;
+  background: rgba(167, 139, 250, 0.13);
+  font-family: var(--mono);
+  font-size: 0.53rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.review-copy { min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.review-label { overflow: hidden; font-size: 0.8rem; text-overflow: ellipsis; white-space: nowrap; }
+.review-answer { color: var(--muted); font-size: 0.69rem; line-height: 1.3; }
+.answer-row.is-ok .review-answer { color: var(--good); }
+.answer-row.is-bad .review-answer { color: #ffb1bb; }
 
 /* ---------- accesibilidad ---------- */
 :focus-visible { outline: 3px solid #8ab4ff; outline-offset: 3px; border-radius: 12px; }
