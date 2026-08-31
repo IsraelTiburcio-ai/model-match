@@ -6,7 +6,7 @@ Microjuego educativo arcade, mobile-first, para reforzar la **clasificación de 
 
 - **Tema académico:** Optimización I — Gimnasio 2 ("Modelos de Programación Lineal"), sección **2.1 Introducción a los Modelos → Clasificación de los Modelos** (p. 4) y **Clasificación de los Modelos Simbólicos** (p. 5).
 - **Mecánica:** Aparece en pantalla un modelo (imagen, maqueta, gráfica o fórmula) y el jugador tiene **6 segundos** para clasificarlo tocando una de las 3 categorías. La pista se revela después de responder como feedback académico. Hay sonido opcional, partículas y vibración visual al fallar.
-- **Duración:** 8 clasificaciones por partida ≈ **45–60 segundos** como máximo con la cuenta regresiva activa.
+- **Duración:** 10 clasificaciones por partida ≈ **55–75 segundos** como máximo con la cuenta regresiva activa.
 - **Fuente académica:** Material oficial del Gimnasio 2 de la profesora (PDF). Las definiciones y ejemplos provienen directamente del material:
   - **Icónicos:** imágenes a escala del sistema real (globo terráqueo, fotografía, plano).
   - **Analógicos:** se asemejan al sistema real en su comportamiento y se basan en las propiedades (maqueta en funcionamiento, curva de demanda, diagrama de flujo, diagrama de comportamiento).
@@ -15,7 +15,7 @@ Microjuego educativo arcade, mobile-first, para reforzar la **clasificación de 
 ## Cómo jugar
 
 1. Toca **JUGAR**.
-2. Clasifica 8 modelos tocando **ICÓNICO**, **ANALÓGICO** o **SIMBÓLICO**.
+2. Clasifica 10 modelos aleatorios tocando **ICÓNICO**, **ANALÓGICO** o **SIMBÓLICO**.
 3. Al final ves tus aciertos, tu tiempo y puedes **JUGAR OTRA VEZ**.
 
 En desktop también funciona con teclado: `1` `2` `3` para responder, `M` para silenciar.

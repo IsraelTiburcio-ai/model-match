@@ -38,7 +38,7 @@
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // ---------- estado ----------
-  const TOTAL = 8;
+  const TOTAL = 10;
   let queue = [];
   let index = 0;
   let score = 0;
@@ -63,7 +63,7 @@
 
   const catById = (id) => categories.find((c) => c.id === id);
 
-  // 8 ítems garantizando ≥2 de cada categoría
+  // 10 ítems aleatorios garantizando ≥2 de cada categoría
   function buildQueue() {
     const byCat = categories.map((c) => shuffle(items.filter((it) => it.cat === c.id)));
     const picked = byCat.flatMap((group) => group.slice(0, 2));
