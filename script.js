@@ -77,7 +77,8 @@
 
   // ---------- audio (Web Audio API, sin archivos) ----------
   let audioCtx = null;
-  let muted = localStorage.getItem('mm_muted') === '1';
+  let muted = false;
+  try { muted = localStorage.getItem('mm_muted') === '1'; } catch (_) { /* optional storage */ }
 
   function updateMuteUI() {
     btnMute.dataset.muted = String(muted);
@@ -474,7 +475,7 @@
 
   btnMute.addEventListener('click', () => {
     muted = !muted;
-    localStorage.setItem('mm_muted', muted ? '1' : '0');
+    try { localStorage.setItem('mm_muted', muted ? '1' : '0'); } catch (_) { /* keep session preference */ }
     updateMuteUI();
     if (!muted) sfx.tap();
   });
