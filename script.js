@@ -42,6 +42,7 @@
 
   // ---------- estado ----------
   const TOTAL = 10;
+  const resultsBridge = window.OptiLabResults ? window.OptiLabResults.create('model-match') : { start() {}, complete() {}, cancel() {} };
   let queue = [];
   let index = 0;
   let score = 0;
@@ -280,6 +281,7 @@
   }
 
   function startGame() {
+    resultsBridge.start();
     // El primer gesto debe desbloquear el audio antes de que pueda vencer el reloj.
     primeAudio();
     queue = buildQueue();
@@ -429,6 +431,9 @@
     srStatus.textContent = `Fin del juego. Aciertos: ${score} de ${TOTAL}. Tiempo: ${secs} segundos. ${v.text}`;
     show('result');
     btnAgain.focus({ preventScroll: true });
+    const timeouts = answerLog.filter(answer => answer && answer.timedOut).length;
+    const errors = answerLog.filter(answer => answer && !answer.correct && !answer.timedOut).length;
+    resultsBridge.complete({ reason: 'completed', correct: score, total: TOTAL, attempts: score + errors, errors, timeouts, durationMs: secs * 1000 });
   }
 
   // ---------- construcción de UI ----------
